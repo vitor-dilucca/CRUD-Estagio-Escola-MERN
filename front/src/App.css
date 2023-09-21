@@ -1,4 +1,5 @@
-#root {
+
+/* #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
@@ -39,4 +40,48 @@
 
 .read-the-docs {
   color: #888;
+} */
+
+.marcador {
+  /* background: #fe9d9d;
+    border: 1px solid #f94646; */
+  height: 45px;
+}
+
+.marcador-container {
+  background: #dddddd;
+  /* border: 1px solid #36ae26; */
+  /* height: 400px; */
+  width: 900px;
+  max-width: 900px;
+  display: inline-block;
+  margin: 10px;
+}
+
+.borda {
+  border: 1px solid blue;
+}
+
+.linha2 {
+  background: rgb(78, 179, 219);
+  border: 1px solid white;
+}
+
+.row-var {
+  border: 1px solid #eeeeee;
+  align-items: center;
+}
+body{
+  background-color: rgb(165, 168, 173);
+}
+
+.linha1{
+  margin-top: 10px;
+  background-color: #dddddd;
+  width: 100%;
+}
+
+/* In App.css or your custom CSS file */
+.container {
+  border: 1px solid red;
 }
