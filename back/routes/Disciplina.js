@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
-const {sayHi}=require('../controllers/Disciplina')
+const {criar}=require('../controllers/Disciplina')
 
-router.get('/',sayHi)
+router.post('/criar',criar)
 
 module.exports = router
