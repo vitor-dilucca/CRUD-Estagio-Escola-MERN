@@ -1,6 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
 require("dotenv").config();
+//import routes
+const discRoutes = require('./routes/Disciplina')
 
 //app
 const app = express();
