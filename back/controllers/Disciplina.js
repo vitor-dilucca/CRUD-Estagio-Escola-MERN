@@ -65,3 +65,26 @@ exports.update = async (req, res) => {
     });
   }
 };
+
+exports.remove = async (req, res) => {
+  try {
+    const deletedDisciplina = await Disciplina.findByIdAndRemove(req.disciplina._id);
+    console.log(req.disciplina._id)
+    // Handle the case when the disciplina is not found
+    if (!deletedDisciplina) {
+      return res.status(404).json({
+        error: "Disciplina not found",
+      });
+    }
+  
+    // If successful, you can also send a response indicating the disciplina was deleted
+    res.json({
+      message: "Disciplina deleted successfully",
+      deletedDisciplina,
+    });
+  } catch (err) {
+    res.status(400).json({
+      error: "Failed to delete the disciplina",
+    });
+  }
+};
