@@ -1,7 +1,14 @@
 const express = require('express')
 const router = express.Router()
-const {criar}=require('../controllers/Disciplina')
 
-router.post('/criar',criar)
+const {create,getAllDisciplines, read ,disciplineById, update}=require('../controllers/Disciplina')
 
+router.post('/create',create)
+router.get('/disciplines',getAllDisciplines)
+router.route('/discipline/:disciplineId')
+.get(read)
+.put(update)
+// .delete(remove)
+
+router.param('disciplineId',disciplineById)
 module.exports = router
