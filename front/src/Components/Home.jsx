@@ -1,39 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import "../App.css";
-
-// const DisciplinaRow = ({ disciplina }) => (
-//   <div className="row row-var">
-//     <div className="marcador col font-weight-bold">{disciplina.disciplina}</div>
-//     <div className="marcador col-6 font-weight-bold">{disciplina.classe}</div>
-//     <div className="marcador col-2">
-//       <Link to={`/editar/${disciplina._id}`}>
-//         <button className="btn btn-success">Editar</button>
-//       </Link>
-//     </div>
-//     <div className="marcador col-2">
-//       <Link to={`/excluir/${disciplina._id}`}>
-//         <button className="btn btn-danger">Excluir</button>
-//       </Link>
-//     </div>
-//   </div>
-// );
+import { getDisciplines } from "./apiCore"; // Import the getDisciplines function
 
 const Home = () => {
   const [disciplinas, setDisciplinas] = useState([]);
 
-  // useEffect(() => {
-  //   // Fetch data from your Express.js server
-  //   axios
-  //     .get("/api/disciplinas")
-  //     .then((response) => {
-  //       setDisciplinas(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
-  // }, []);
+  useEffect(() => {
+    // Fetch data using the getDisciplines function
+    getDisciplines()
+      .then((data) => {
+        setDisciplinas(data); // Update the state with fetched data
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []); // The empty dependency array means this effect runs once after the component mounts
 
   return (
     <>
@@ -59,24 +41,20 @@ const Home = () => {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>
-              <strong>Portugues</strong>
-            </td>
-            <td>
-              <strong>Linguagens e suas tecnologias</strong>
-            </td>
-            <td>
-              <Link to={`/editar/`}>
-                <button className="btn btn-success">Editar</button>
-              </Link>
-              <Link to={`/excluir/`}>
-                <button className="btn btn-danger">Excluir</button>
-              </Link>
-            </td>
-            {/* <!-- Add more data cells as needed --> */}
-          </tr>
-          {/* <!-- Add more rows as needed --> */}
+          {disciplinas.map((disciplina) => (
+            <tr key={disciplina._id}>
+              <td><strong>{disciplina.nome}</strong></td>
+              <td><strong>{disciplina.classe}</strong></td>
+              <td>
+                <Link to={`/editar/${disciplina._id}`}>
+                  <button className="btn btn-success">Editar</button>
+                </Link>
+                <Link to={`/excluir/${disciplina._id}`}>
+                  <button className="btn btn-danger">Excluir</button>
+                </Link>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </>

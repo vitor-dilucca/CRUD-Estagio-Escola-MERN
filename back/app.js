@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
+const cors = require('cors')
 require("dotenv").config();
 
 //import routes
@@ -22,6 +23,7 @@ mongoose.connection.on("error", (err) => {
 //middleware
 app.use(morgan('dev'))
 app.use(bodyParser.json())
+app.use(cors())
 
 //routes
 app.use("/api", disciplinaRoutes);
