@@ -74,6 +74,9 @@
 body{
   background-color: rgb(165, 168, 173);
 }
+label{
+  font-weight: 600;
+}
 
 .linha1{
   margin-top: 10px;
@@ -84,4 +87,8 @@ body{
 /* In App.css or your custom CSS file */
 .container {
   border: 1px solid red;
+}
+
+.cadastro-box{
+  background-color: aliceblue;
 }

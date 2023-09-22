@@ -25,7 +25,7 @@ const Home = () => {
             <h1>Consulta de Disciplinas</h1>
           </div>
           <div className="col-3">
-            <Link to={`/novo/`}>
+            <Link to={`/cadastro/`}>
               <button className="btn btn-primary">NOVO</button>
             </Link>
           </div>
