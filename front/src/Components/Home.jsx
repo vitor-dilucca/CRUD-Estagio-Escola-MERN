@@ -1,21 +1,34 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../App.css";
-import { getDisciplines } from "./apiCore"; // Import the getDisciplines function
+import { getDisciplines, deleteDiscipline } from "./apiCore"; // Import the getDisciplines function
 
 const Home = () => {
   const [disciplinas, setDisciplinas] = useState([]);
+  const [confirmationId,setConfirmationId] = useState(null)
 
   useEffect(() => {
-    // Fetch data using the getDisciplines function
-    getDisciplines()
-      .then((data) => {
-        setDisciplinas(data); // Update the state with fetched data
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    fetchDisciplines()
   }, []); // The empty dependency array means this effect runs once after the component mounts
+
+  const fetchDisciplines=async()=>{
+    try{
+      const data = await getDisciplines();
+      setDisciplinas(data)
+    }catch(error){
+      console.error(error)
+    }
+  }
+
+  const destroy = (disciplineId)=>{
+    deleteDiscipline(disciplineId).then((data)=>{
+      if(data.error){
+        console.log(data.error)
+      }else{
+
+      }
+    })
+  }
 
   return (
     <>

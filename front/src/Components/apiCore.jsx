@@ -29,3 +29,16 @@ export const create = (data) => {
       console.log(err);
     });
 };
+
+export const deleteDiscipline = (disciplineId) => {
+  // Send the request to the server with the password as plain text
+  return fetch(`${API}/discipline/${disciplineId}`, {
+    method: "DELETE",
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
