@@ -2,9 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom/cjs/react-router-dom";
 import { useState, useEffect } from "react";
 import "../App.css"; // Import your custom CSS
-import { create } from "./apiCore";
+import { updateDiscipline,getDisciplines } from "./apiCore";
 
-const Cadastro = () => {
+const Editar = () => {
   const [values, setValues] = useState({
     nome: "",
     classe: "",
@@ -240,4 +240,4 @@ const Cadastro = () => {
   );
 };
 
-export default Cadastro;
+export default Editar;

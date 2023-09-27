@@ -41,4 +41,21 @@ export const deleteDiscipline = (disciplineId) => {
     .catch((err) => {
       console.log(err);
     });
-};
+  };
+  
+  export const updateDiscipline = (disciplineId,discipline)=>{
+    return fetch(`${API}/discipline/${disciplineId}`, {
+      method: "PUT",
+      // headers:{
+      //   "Content-Type":"application/json"
+      // },
+      body:discipline
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    
+}

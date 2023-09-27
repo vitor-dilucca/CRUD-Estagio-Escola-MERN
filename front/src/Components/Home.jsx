@@ -107,9 +107,6 @@ const Home = () => {
                           aria-label="Close"
                         ></button>
                       </div>
-                      {/* <div className="modal-body">
-                        Uma vez deletada não pode ser recuperada
-                      </div> */}
                       <div className="modal-footer">
                         <button
                           type="button"
@@ -136,20 +133,6 @@ const Home = () => {
           ))}
         </tbody>
       </table>
-      {confirmationId && (
-        <div className="confirmation-dialog">
-          <p>Are you sure you want to delete this discipline?</p>
-          <button
-            className="btn btn-danger"
-            onClick={() => destroy(confirmationId)}
-          >
-            Yes
-          </button>
-          <button className="btn btn-secondary" onClick={cancelDelete}>
-            No
-          </button>
-        </div>
-      )}
     </>
   );
 };
