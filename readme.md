@@ -1,0 +1,3 @@
+-para iniciar o backend -> nodemon app.js
+-para iniciar o frontend -> npm run dev
+-O db está no mongoDB chamado "Disciplinas Estagio MERN" voce pode acessá-lo mais facilmente pelo programa desktop 'MongoDB Compass'
