@@ -73,6 +73,7 @@
 }
 body{
   background-color: rgb(165, 168, 173);
+  border-radius: 5px;
 }
 label{
   font-weight: 600;
@@ -86,9 +87,11 @@ label{
 
 /* In App.css or your custom CSS file */
 .container {
-  border: 1px solid red;
+  padding-bottom: 4px;
+  padding-top: 6px;
 }
 
 .cadastro-box{
   background-color: aliceblue;
+  border-radius: 5px;
 }

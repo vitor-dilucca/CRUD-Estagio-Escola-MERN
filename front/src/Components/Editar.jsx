@@ -2,27 +2,66 @@ import React from "react";
 import { Link } from "react-router-dom/cjs/react-router-dom";
 import { useState, useEffect } from "react";
 import "../App.css"; // Import your custom CSS
-import { updateDiscipline,getDisciplines } from "./apiCore";
+import { updateDiscipline, getDiscipline } from "./apiCore";
 
-const Editar = () => {
+const Editar = ({ match }) => {
   const [values, setValues] = useState({
     nome: "",
     classe: "",
     data_limite: "",
-    estudo: "",
+    estudo: false,
     aplicavel_fora: false,
     error: "",
     success: false,
+    loading: false,
   });
 
-  const { nome, classe, data_limite, estudo, aplicavel_fora, error, success } =
-    values;
+  const {
+    nome,
+    classe,
+    data_limite,
+    estudo,
+    aplicavel_fora,
+    error,
+    success,
+    loading,
+  } = values;
 
-  const handleChange = (name, value) => (event) => {
-    if (name === "aplicavel_fora") {
-      setValues({ ...values, error: false, aplicavel_fora: !aplicavel_fora });
-    } else if (name === "estudo") {
-      setValues({ ...values, error: false, [name]: value });
+  const init = (disciplineId) => {
+    getDiscipline(disciplineId).then((data) => {
+      function formatDate(dateString) {
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-indexed, so add 1 and pad with '0' if necessary.
+        const day = String(date.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+      }
+
+      const originalDateString = data.data_limite;
+      const formattedDate = formatDate(originalDateString);
+
+      if (data.error) {
+        setValues({ ...values, error: data.error });
+      } else {
+        setValues({
+          ...values,
+          nome: data.nome,
+          classe: data.classe,
+          data_limite: formattedDate,
+          estudo: data.estudo,
+          aplicavel_fora: data.aplicavel_fora,
+        });
+      }
+    });
+  };
+
+  useEffect(() => {
+    init(match.params.disciplineId);
+  }, []);
+
+  const handleChange = (name) => (event) => {
+    if (name === "aplicavel_fora" || name === "estudo") {
+      setValues({ ...values, error: false, [name]: !values[name] }); // Toggle the checkbox state
     } else {
       setValues({ ...values, error: false, [name]: event.target.value });
     }
@@ -34,7 +73,7 @@ const Editar = () => {
     setValues({ ...values, error: false });
 
     try {
-      const data = await create({
+      const data = await updateDiscipline(match.params.disciplineId,{
         nome,
         classe,
         data_limite,
@@ -47,7 +86,7 @@ const Editar = () => {
       } else {
         setValues({
           ...values,
-          nome: "",
+          nome: data.nome,
           classe: "",
           data_limite: "",
           estudo: false,
@@ -61,18 +100,13 @@ const Editar = () => {
     }
   };
 
-  useEffect(() => {
-    // Toggle aplicavel_fora and estudo to false when the component mounts
-    setValues({ ...values, aplicavel_fora: false, estudo: false });
-  }, []);
-
-  const cadastroForm = () => (
+  const editarForm = () => (
     <>
       <form action="">
         <div className="container cadastro-box">
           <div className="row align-items-center">
             <div className="col-9">
-              <h1>Consulta de Disciplinas</h1>
+              <h1>Editar Disciplina</h1>
             </div>
             <div className="col-3">
               <Link to={`/`}>
@@ -108,8 +142,8 @@ const Editar = () => {
                   onChange={handleChange("classe")}
                   value={classe}
                 >
-                  <option value="Selecione uma Classe">
-                    Selecione uma Classe
+                  <option>
+                    --Selecione uma Classe--
                   </option>
                   <option value="Base Nacional Comum">
                     Base Nacional Comum
@@ -192,7 +226,7 @@ const Editar = () => {
                   id="aplicavel_fora"
                   name="aplicavel_fora"
                   onChange={handleChange("aplicavel_fora")}
-                  value={aplicavel_fora}
+                  checked={aplicavel_fora}
                 />
                 <label className="form-check-label" htmlFor="aplicavel_fora">
                   Aplicável fora da sala
@@ -227,15 +261,24 @@ const Editar = () => {
       className="alert alert-info mt-2"
       style={{ display: success ? "" : "none" }}
     >
-      Disciplina criada. <Link to="/">Voltar</Link>
+      Disciplina editada. <Link to="/">Voltar</Link>
     </div>
   );
 
+  const showLoading = () => {
+    if (loading) {
+      <div className="alert alert-success">
+        <h2>Loading...</h2>
+      </div>;
+    }
+  };
+
   return (
     <>
+      {showLoading()}
       {showSuccess()}
       {showError()}
-      {cadastroForm()};
+      {editarForm()};
     </>
   );
 };

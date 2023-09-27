@@ -10,6 +10,16 @@ export const getDisciplines = () => {
     .catch((err) => console.log(err));
 };
 
+export const getDiscipline = (disciplineId) => {
+  return fetch(`${API}/discipline/${disciplineId}`, {
+    method: "GET",
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => console.log(err));
+};
+
 export const create = (data) => {
   return fetch(
     `${API}/create`,
@@ -46,10 +56,11 @@ export const deleteDiscipline = (disciplineId) => {
   export const updateDiscipline = (disciplineId,discipline)=>{
     return fetch(`${API}/discipline/${disciplineId}`, {
       method: "PUT",
-      // headers:{
-      //   "Content-Type":"application/json"
-      // },
-      body:discipline
+      headers:{
+        "Content-Type":"application/json",
+        Accept: 'application/json',
+      },
+      body:JSON.stringify(discipline)
     })
       .then((response) => {
         return response.json();
