@@ -5,30 +5,42 @@ import { getDisciplines, deleteDiscipline } from "./apiCore"; // Import the getD
 
 const Home = () => {
   const [disciplinas, setDisciplinas] = useState([]);
-  const [confirmationId,setConfirmationId] = useState(null)
+  const [confirmationId, setConfirmationId] = useState(null);
 
   useEffect(() => {
-    fetchDisciplines()
+    fetchDisciplines();
   }, []); // The empty dependency array means this effect runs once after the component mounts
 
-  const fetchDisciplines=async()=>{
-    try{
+  const fetchDisciplines = async () => {
+    try {
       const data = await getDisciplines();
-      setDisciplinas(data)
-    }catch(error){
-      console.error(error)
+      setDisciplinas(data);
+    } catch (error) {
+      console.error(error);
     }
-  }
+  };
 
-  const destroy = (disciplineId)=>{
-    deleteDiscipline(disciplineId).then((data)=>{
-      if(data.error){
-        console.log(data.error)
-      }else{
+  const confirmDelete = (disciplineId) => {
+    setConfirmationId(disciplineId);
+  };
 
+  const cancelDelete = (disciplineId) => {
+    setConfirmationId(null);
+  };
+
+  const destroy = async (disciplineId) => {
+    try {
+      const data = await deleteDiscipline(disciplineId);
+      if (data.error) {
+        console.log(data.error);
+      } else {
+        await fetchDisciplines(); // reload the discipline list after sucesful deletion
+        setConfirmationId(null); //close the confirmation dialog
       }
-    })
-  }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <>
@@ -56,20 +68,88 @@ const Home = () => {
         <tbody>
           {disciplinas.map((disciplina) => (
             <tr key={disciplina._id}>
-              <td><strong>{disciplina.nome}</strong></td>
-              <td><strong>{disciplina.classe}</strong></td>
+              <td>
+                <strong>{disciplina.nome}</strong>
+              </td>
+              <td>
+                <strong>{disciplina.classe}</strong>
+              </td>
               <td>
                 <Link to={`/editar/${disciplina._id}`}>
                   <button className="btn btn-success">Editar</button>
                 </Link>
-                <Link to={`/excluir/${disciplina._id}`}>
-                  <button className="btn btn-danger">Excluir</button>
-                </Link>
+                <button
+                  className="btn btn-danger"
+                  onClick={() => confirmDelete(disciplina._id)}
+                  data-bs-toggle="modal"
+                  data-bs-target="#exampleModal"
+                >
+                  Excluir
+                </button>
+                {/* <!-- Modal --> */}
+                <div
+                  className="modal fade"
+                  id="exampleModal"
+                  tabIndex="-1"
+                  aria-labelledby="exampleModalLabel"
+                  aria-hidden="true"
+                >
+                  <div className="modal-dialog">
+                    <div className="modal-content">
+                      <div className="modal-header">
+                        <h5 className="modal-title" id="exampleModalLabel">
+                          Você tem certeza que quer deletar esta disciplina?
+                        </h5>
+                        <button
+                          type="button"
+                          className="btn-close"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        ></button>
+                      </div>
+                      {/* <div className="modal-body">
+                        Uma vez deletada não pode ser recuperada
+                      </div> */}
+                      <div className="modal-footer">
+                        <button
+                          type="button"
+                          className="btn btn-secondary"
+                          onClick={cancelDelete}
+                          data-bs-dismiss="modal"
+                          >
+                          Não
+                        </button>
+                        <button
+                          type="button"
+                          className="btn btn-danger"
+                          onClick={() => destroy(confirmationId)}
+                          data-bs-dismiss="modal"
+                        >
+                          Sim
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+      {confirmationId && (
+        <div className="confirmation-dialog">
+          <p>Are you sure you want to delete this discipline?</p>
+          <button
+            className="btn btn-danger"
+            onClick={() => destroy(confirmationId)}
+          >
+            Yes
+          </button>
+          <button className="btn btn-secondary" onClick={cancelDelete}>
+            No
+          </button>
+        </div>
+      )}
     </>
   );
 };
